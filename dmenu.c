@@ -103,7 +103,11 @@ calcoffsets(void)
 	int i, n;
 
 	if (lines > 0)
-		n = lines * bh;
+		if (centered) {
+		n = (lines * bh);
+		} else {
+		n = ((lines -1) * bh) + promptheight;
+		}
 	else
 		n = mw - (promptw + inputw + TEXTW("<") + TEXTW(">") + TEXTW(numbers));
 	/* calculate which items will begin the next page and previous page */
@@ -198,24 +202,43 @@ drawmenu(void)
 
 	if (prompt && *prompt) {
 		drw_setscheme(drw, scheme[SchemeSel]);
+		if (centered) {
 		x = drw_text(drw, x, 0, promptw, bh, lrpad / 2, prompt, 0);
+		} else {
+		x = drw_text(drw, x, 0, promptw, promptheight, lrpad / 2, prompt, 0);
+		}
 	}
 	/* draw input field */
 	w = (lines > 0 || !matches) ? mw - x : inputw;
 	drw_setscheme(drw, scheme[SchemeNorm]);
+	if (centered) {
 	drw_text(drw, x, 0, w, bh, lrpad / 2, text, 0);
+	} else {
+	drw_text(drw, x, 0, w, promptheight, lrpad / 2, text, 0);
+	}
 
 	curpos = TEXTW(text) - TEXTW(&text[cursor]);
 	if ((curpos += lrpad / 2 - 1) < w) {
 		drw_setscheme(drw, scheme[SchemeNorm]);
+		if (centered) {
 		drw_rect(drw, x + curpos, 2 + (bh - fh) / 2, 2, fh - 4, 1, 0);
+		} else {
+		drw_rect(drw, x + curpos, 2 + (promptheight - fh) / 2, 2, fh - 4, 1, 0);
+		}
 	}
 
 	recalculatenumbers();
 	if (lines > 0) {
+		_Bool ispromptsize = True;
 		/* draw vertical list */
-		for (item = curr; item != next; item = item->right)
+		for (item = curr; item != next; item = item->right){
+			if (ispromptsize) {
+				drawitem(item, x, y = promptheight, mw - x);
+				ispromptsize = False;
+				continue;
+			}
 			drawitem(item, x, y += bh, mw - x);
+		}
 	} else if (matches) {
 		/* draw horizontal list */
 		x += inputw;
@@ -234,7 +257,11 @@ drawmenu(void)
 		}
 	}
 	drw_setscheme(drw, scheme[SchemeNorm]);
+	if (centered) {
 	drw_text(drw, mw - TEXTW(numbers), 0, TEXTW(numbers), bh, lrpad / 2, numbers, 0);
+	} else {
+	drw_text(drw, mw - TEXTW(numbers), 0, TEXTW(numbers), promptheight, lrpad / 2, numbers, 0);
+	}
 	drw_map(drw, win, 0, 0, mw, mh);
 }
 
@@ -664,7 +691,12 @@ buttonpress(XEvent *e)
 {
 	struct item *item;
 	XButtonPressedEvent *ev = &e->xbutton;
-	int x = 0, y = 0, h = bh, w;
+	int x = 0, y = 0, h, w;
+	if (centered) {
+		h = bh;
+	} else {
+		h = promptheight;
+	}
 
 	if (ev->window != win)
 		return;
@@ -884,7 +916,11 @@ setup(void)
 	bh = drw->fonts->h + 2;
 	bh = MAX(bh,lineheight);	/* make a menu line AT LEAST 'lineheight' tall */
 	lines = MAX(lines, 0);
+		if (centered) {
 	mh = (lines + 1) * bh;
+		} else {
+	mh = (lines * bh) + promptheight;
+		}
 	promptw = (prompt && *prompt) ? TEXTW(prompt) - lrpad / 4 : 0;
 #ifdef XINERAMA
 	i = 0;
@@ -917,9 +953,9 @@ setup(void)
 			x = info[i].x_org + ((info[i].width  - mw) / 2);
 			y = info[i].y_org + ((info[i].height - mh) / 2);
 		} else {
-			x = info[i].x_org;
-			y = info[i].y_org + (topbar ? 0 : info[i].height - mh);
-			mw = info[i].width;
+			x = info[i].x_org + sidepad;
+			y = info[i].y_org + vertpad + (topbar ? 0 : info[i].height - mh);
+			mw = info[i].width - 2 * sidepad;
 
 		}
 
@@ -936,9 +972,9 @@ setup(void)
 			x = (wa.width  - mw) / 2;
 			y = (wa.height - mh) / 2;
 		} else {
-			x = 0;
-			y = topbar ? 0 : wa.height - mh;
-			mw = wa.width;
+			x = 0 + sidepad;
+			y = topbar ? 0 : wa.height - mh + vertpad;
+			mw = wa.width - 2 * sidepad;
 		}
 	}
 	inputw = mw / 3; /* input width: ~33% of monitor width */
