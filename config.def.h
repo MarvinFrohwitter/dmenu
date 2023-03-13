@@ -13,6 +13,7 @@ static int min_width = 500;                    /* minimum width when centered */
 static char font[] = "monospace:size=10";
 static char *fonts[]   = {font, "JetBrainsMono Nerd Font:pixelsize=14:antialias=true:autohint=true", "JoyPixels:size=12:antialias=true:autohint=true" };
 static char *prompt      = ">>>";      /* -p  option; prompt to the left of input field */
+static const char *dynamic     = NULL;      /* -dy option; dynamic command to run on input change */
 
 static char normfgcolor[] = "#bbbbbb";
 static char normbgcolor[] = "#222222";
@@ -24,6 +25,7 @@ static char *colors[SchemeLast][2] = {
 	[SchemeNorm] = { normfgcolor, normbgcolor },
 	[SchemeSel]  = { selfgcolor,  selbgcolor  },
 	[SchemeOut] = { "#000000", "#00ffff" },
+	[SchemeHp]  = { "#bbbbbb", "#333333" }
 };
 
 static const unsigned int alphas[SchemeLast][2] = {
