@@ -617,22 +617,25 @@ keypress(XKeyEvent *ev)
 	if (ev->state & ControlMask) {
 		switch(ksym) {
 		case XK_a: ksym = XK_Home;      break;
+		case XK_h: /* fallthrough */
 		case XK_b: ksym = XK_Left;      break;
 		case XK_c: ksym = XK_Escape;    break;
 		case XK_d: ksym = XK_Delete;    break;
 		case XK_e: ksym = XK_End;       break;
+		case XK_l: /* fallthrough */
 		case XK_f: ksym = XK_Right;     break;
 		case XK_g: ksym = XK_Escape;    break;
-		case XK_h: ksym = XK_BackSpace; break;
+		case XK_B: ksym = XK_BackSpace; break;
 		case XK_i: ksym = XK_Tab;       break;
-		case XK_j: /* fallthrough */
 		case XK_J: /* fallthrough */
 		case XK_m: /* fallthrough */
 		case XK_M: ksym = XK_Return; ev->state &= ~ControlMask; break;
+		case XK_j: /* fallthrough */
 		case XK_n: ksym = XK_Down;      break;
+		case XK_k: /* fallthrough */
 		case XK_p: ksym = XK_Up;        break;
 
-		case XK_k: /* delete right */
+		case XK_F: /* delete right */
 			text[cursor] = '\0';
 			match();
 			break;
@@ -645,6 +648,8 @@ keypress(XKeyEvent *ev)
 			while (cursor > 0 && !strchr(worddelimiters, text[nextrune(-1)]))
 				insert(NULL, nextrune(-1) - cursor);
 			break;
+		case XK_v: /* paste selection */
+		case XK_V: /* paste selection */
 		case XK_y: /* paste selection */
 		case XK_Y:
 			XConvertSelection(dpy, (ev->state & ShiftMask) ? clip : XA_PRIMARY,
