@@ -4,6 +4,7 @@
 static int promptheight = 30;                      /* size only the prompt heigt to the bar heigt in normalmode */
 static int vertpad = 10;                      /* offsets the prompt vertical, to be exactly the dwmbar padding  */
 static int sidepad = 10;                      /* offsets the prompt horizontal, to be exactly the dwmbar padding  */
+static int instant = 0;
 static int topbar = 1;                      /* -b  option; if 0, dmenu appears at bottom     */
 static int incremental = 0;                 /* -r  option; if 1, outputs text each time a key is pressed */
 static const unsigned int alpha = 0xdd;
