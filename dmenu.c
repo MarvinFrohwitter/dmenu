@@ -555,6 +555,7 @@ match(void)
 
 	if(instant && matches && matches==matchend && !lsubstr) {
 		puts(matches->text);
+		printf("digga!!!!");
 		cleanup();
 		exit(0);
 	}
@@ -1244,9 +1245,9 @@ setup(void)
 static void
 usage(void)
 {
-	die("usage: dmenu [-bfinvP] [-l lines] [-h height] [-p prompt] [-fn font] [-m monitor]\n"
+	die("usage: dmenu [-bfiNvP] [-l lines] [-h height] [-p prompt] [-fn font] [-m monitor]\n"
 	      "             [-nb color] [-nf color] [-r] [-sb color] [-sf color] [-w windowid]\n"
-	      "             [-hb color] [-hf color] [-hp items] [-dy command]\n", stderr);
+	      "             [-hb color] [-hf color] [-it text] [-hp items] [-dy command]\n", stderr);
 	exit(1);
 }
 
@@ -1282,9 +1283,9 @@ main(int argc, char *argv[])
 			passwd = 1;
 		else if (!strcmp(argv[i], "-ix"))  /* adds ability to return index in list */
 			print_index = 1;
-		else if (!strcmp(argv[i], "-n")) /* instant select only match */
+		else if (!strcmp(argv[i], "-N")){ /* instant select only match */
 			instant = 1;
-		else if (i + 1 == argc)
+		} else if (i + 1 == argc)
 			usage();
 		/* these options take one argument */
 		else if (!strcmp(argv[i], "-l"))   /* number of lines in vertical list */
@@ -1313,7 +1314,10 @@ main(int argc, char *argv[])
 			colors[SchemeHp][ColFg] = argv[++i];
 		else if (!strcmp(argv[i], "-w"))   /* embedding window id */
 			embed = argv[++i];
-		else if (!strcmp(argv[i], "-n"))   /* preselected item */
+		else if (!strcmp(argv[i], "-it")) {   /* embedding window id */
+			const char * text = argv[++i];
+			insert(text, strlen(text));
+		} else if (!strcmp(argv[i], "-n"))   /* preselected item */
 			preselected = atoi(argv[++i]);
 		else if (!strcmp(argv[i], "-bw"))
 			border_width = atoi(argv[++i]); /* border width */
