@@ -10,15 +10,31 @@ In order to build dmenu you need the Xlib header files.
 
 Installation
 ------------
-Edit config.mk to match your local setup (dmenu is installed into
-the /usr/local namespace by default).
+```SHELL
+$ sudo make clean install
+```
 
-Afterwards enter the following command to build and install dmenu
-(if necessary as root):
+### The external patches that are included and some customization from myself.
 
-    make clean install
-
-
-Running dmenu
--------------
-See the man page for details.
+For the input line you can choose a different hight as the items.
+Added padding capability and independent prompt hight
+dmenu-noinputlinesbelowpromptfullwidth-5.2.diff
+dmenu-initialtext-4.7.diff
+dmenu-instant-4.7.diff
+dmenu-dynamicoptions-5.0.diff
+dmenu-incremental-20160702-3c91eed.diff
+dmenu-printindex-5.0.diff
+dmenu-preselect-5.2.diff
+dmenu-password-5.0.diff
+dmenu-highpriority-e35976f.diff
+dmenu-mousesupport-motion-5.2.diff
+unpatch xresources and added xresourcess alt
+dmenu-xresources-4.9.diff
+dmenu-alpha-20210605-1a13d04.diff
+dmenu-mousesupport-5.1.diff
+dmenu-border-20201112-1a13d04.diff
+dmenu-numbers-20220512-28fb3e2.diff
+dmenu-fuzzymatch-4.9.diff
+dmenu-lineheight-5.0.diff
+dmenu-center-20200111-8cd37e1.diff
+dmenu-dracula-20211128-d78ff08.diff
