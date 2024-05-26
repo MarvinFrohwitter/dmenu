@@ -6,6 +6,7 @@ static int vertpad = 10;                      /* offsets the prompt vertical, to
 static int sidepad = 10;                      /* offsets the prompt horizontal, to be exactly the dwmbar padding  */
 static int instant = 0;
 static int topbar = 1;                      /* -b  option; if 0, dmenu appears at bottom     */
+static int draw_input = 1;                  /* -noi option; if 0, the input will not be drawn by default */
 static int incremental = 0;                 /* -r  option; if 1, outputs text each time a key is pressed */
 static const unsigned int alpha = 0xdd;
 static int fuzzy = 1;                      /* -F  option; if 0, dmenu doesn't use fuzzy matching     */
